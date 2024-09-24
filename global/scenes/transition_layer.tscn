@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cavwy6gakahiv"]
+
+[ext_resource type="Script" path="res://global/scripts/TransitonLayer.cs" id="1_g57yb"]
+
+[node name="TransitionLayer" type="CanvasLayer" node_paths=PackedStringArray("colorRect")]
+script = ExtResource("1_g57yb")
+colorRect = NodePath("ColorRect")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.976471)

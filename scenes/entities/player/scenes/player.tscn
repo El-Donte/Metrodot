@@ -1,0 +1,103 @@
+[gd_scene load_steps=12 format=3 uid="uid://cl74b3n23jnjt"]
+
+[ext_resource type="PackedScene" uid="uid://byg2ffwpcq4g2" path="res://scenes/entities/enemies/scenes/entity.tscn" id="1_utn85"]
+[ext_resource type="Script" path="res://scenes/entities/player/scripts/Player.cs" id="2_lc7i2"]
+[ext_resource type="Texture2D" uid="uid://clgaqns85oxlp" path="res://graphics/guns/crosshair.png" id="4_navum"]
+[ext_resource type="Script" path="res://scenes/entities/player/scripts/Crosshair.cs" id="5_sm05a"]
+[ext_resource type="PackedScene" uid="uid://b1c8no6xve706" path="res://scenes/entities/player/scenes/player_graphics.tscn" id="5_y56fh"]
+[ext_resource type="Texture2D" uid="uid://djbe8xgpgw7dj" path="res://graphics/guns/projectiles/explosion2.png" id="6_t743y"]
+[ext_resource type="PackedScene" uid="uid://dktnxw8jo2w8o" path="res://scenes/entities/player/scenes/health_circle.tscn" id="7_u7nxb"]
+[ext_resource type="AudioStream" uid="uid://c1vllheackocx" path="res://audio/dash.wav" id="8_0vwbn"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sl37d"]
+radius = 4.0
+height = 28.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n5g05"]
+particles_animation = true
+particles_anim_h_frames = 7
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_00qls"]
+particle_flag_disable_z = true
+initial_velocity_min = 200.0
+initial_velocity_max = 280.0
+gravity = Vector3(0, 0, 0)
+anim_speed_min = 0.32
+anim_speed_max = 2.0
+
+[node name="Player" node_paths=PackedStringArray("DashCooldown", "Coyote", "JumpBuffer", "crosshair", "AkReload", "ShotgunReload", "RocketReload", "graphics", "particles", "camera") groups=["Player"] instance=ExtResource("1_utn85")]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("2_lc7i2")
+speed = 200
+acceleration = 700
+friction = 900
+DashCooldown = NodePath("Timers/DashCooldown")
+Coyote = NodePath("Timers/Coyote")
+JumpBuffer = NodePath("Timers/JumpBuffer")
+jumpStrenght = 300
+gunJumpStrenght = 180
+gravity = 600
+terminalVelocity = 500.0
+crosshair = NodePath("Crosshair")
+crosshairDistance = 20
+AkReload = NodePath("Timers/AkReload")
+ShotgunReload = NodePath("Timers/ShotgunReload")
+RocketReload = NodePath("Timers/RocketReload")
+akCooldown = 0.5
+shotgunCooldown = 1.2
+rocketCooldown = 1.5
+graphics = NodePath("PlayerGraphics")
+particles = NodePath("ShotgunParticles")
+camera = NodePath("Camera2D")
+
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(0, 5)
+shape = SubResource("CapsuleShape2D_sl37d")
+
+[node name="Camera2D" type="Camera2D" parent="." index="1"]
+zoom = Vector2(5, 5)
+
+[node name="Coyote" type="Timer" parent="Timers" index="0"]
+wait_time = 0.15
+one_shot = true
+
+[node name="JumpBuffer" type="Timer" parent="Timers" index="1"]
+wait_time = 0.25
+one_shot = true
+
+[node name="DashCooldown" type="Timer" parent="Timers" index="2"]
+one_shot = true
+
+[node name="AkReload" type="Timer" parent="Timers" index="3"]
+one_shot = true
+
+[node name="ShotgunReload" type="Timer" parent="Timers" index="4"]
+one_shot = true
+
+[node name="RocketReload" type="Timer" parent="Timers" index="5"]
+one_shot = true
+
+[node name="Crosshair" type="Sprite2D" parent="." index="3"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_navum")
+script = ExtResource("5_sm05a")
+
+[node name="ShotgunParticles" type="GPUParticles2D" parent="." index="4"]
+material = SubResource("CanvasItemMaterial_n5g05")
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_00qls")
+texture = ExtResource("6_t743y")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.5
+
+[node name="HealthCircle" parent="." index="6" instance=ExtResource("7_u7nxb")]
+
+[node name="DashSound" type="AudioStreamPlayer2D" parent="." index="7"]
+stream = ExtResource("8_0vwbn")
+volume_db = -16.875
+
+[node name="PlayerGraphics" parent="." index="8" instance=ExtResource("5_y56fh")]
